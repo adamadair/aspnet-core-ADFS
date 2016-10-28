@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using System.Net.Security;
 
 namespace ADFS_OAuth_Sample
 {
@@ -109,6 +113,7 @@ namespace ADFS_OAuth_Sample
                     return Task.CompletedTask;
                 }
             };
+            options.BackchannelHttpHandler = new OAuthHttpHandler();
             options.ClaimsIssuer = Configuration["ADFS:ServerUrl"];
             options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             options.AuthorizationEndpoint = Configuration["ADFS:ServerUrl"] + "/adfs/oauth2/authorize/";
@@ -125,6 +130,24 @@ namespace ADFS_OAuth_Sample
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+    }
+    internal class OAuthHttpHandler : HttpClientHandler
+    {
+        public OAuthHttpHandler() : base()
+        {
+            ServerCertificateCustomValidationCallback += IsCertificateValid;
+        }
+
+        private bool IsCertificateValid(HttpRequestMessage request, X509Certificate2 certificate, X509Chain chain, SslPolicyErrors errors)
+        {
+            #warning This is NOT production-ready code.  This will skip ALL validation of SSL certificates processed by this handler.
+
+            return true;
+        }
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return base.SendAsync(request, cancellationToken);
         }
     }
 }

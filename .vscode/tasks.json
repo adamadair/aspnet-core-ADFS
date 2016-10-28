@@ -7,7 +7,7 @@
         {
             "taskName": "build",
             "args": [
-                "${workspaceRoot}/project.json"
+                "${workspaceRoot}/src/ADFS-OAuth-Sample/project.json"
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"

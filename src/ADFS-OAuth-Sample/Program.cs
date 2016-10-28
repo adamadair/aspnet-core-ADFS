@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +17,7 @@ namespace ADFS_OAuth_Sample
             var host = new WebHostBuilder()
                 .UseConfiguration(config)
                 .UseKestrel()
+                .UseUrls("http://*:" + (Environment.GetEnvironmentVariable("PORT") ?? "5000"))
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseStartup<Startup>()
                 .Build();
