@@ -67,7 +67,7 @@ namespace ADFS_OAuth_Sample
             options.AuthenticationScheme = "ADFS";
             options.ClientId = Configuration["ADFS:ClientId"];
             options.ClientSecret = "ADFS 3.0 does not support confidential client, but OAuth middleware requires it";
-            options.CallbackPath = new PathString("/signin-adfs");
+            options.CallbackPath = new PathString("/signin-oauth");
             options.Events = new OAuthEvents {
                 OnRedirectToAuthorizationEndpoint = context =>
                 {
